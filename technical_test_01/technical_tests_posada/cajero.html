@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAJERO</title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.waves.min.js"></script>
+</head>
+
+<body id="body">
+    <div class="layout">
+        <main class="cajero">
+            <div class="pantalla">
+                <h1>Retirar</h1>
+                <input type="number" placeholder="Ingrese la cantidad" class="input">
+                <ul class="ul">
+                    <!-- Control de relleno dinamico -->
+                </ul>  
+            </div>
+            <div class="botones">
+                <button id="historial" class="boton">
+                    Historial
+                </button>
+                <button id="retirar" class="boton">
+                    Retirar
+                </button>
+            </div>
+            
+        </main>
+    </div>
+    
+
+
+    <script src="assets/js/cajero.js"></script>
+    <script>
+        VANTA.WAVES({
+            el: "#body",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x303439,
+            waveHeight: 19.50,
+            waveSpeed: 1.40,
+            zoom: 0.81
+        })
+    </script>
+</body>
+
+</html>

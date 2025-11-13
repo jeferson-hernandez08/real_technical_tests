@@ -1,0 +1,9 @@
+header {
+    display: flex;
+    justify-content: center;
+}
+
+body section.principal-section {
+    display: flex;
+    justify-content: center;
+}

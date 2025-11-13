@@ -1,0 +1,74 @@
+.layout{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+main.cajero{
+    width: 520px;
+    height: 400px;
+    background: url(../img/bgCajero.png);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid rgb(44, 43, 43);
+    border-radius: 25px;
+    flex-direction: column;
+}
+
+.pantalla{
+    background-color: #46516d;
+    width: 75%;
+    height: 50%;
+    margin-top: 75px;
+    display: flex;
+    justify-content: center;
+    padding-left: 25px;
+    align-items: start;
+    flex-direction: column;
+    h1{
+        color: white;
+        font-size: 18px;
+        font-weight: 100;
+    }
+    input{
+        border: none;
+        padding: 12px 15px;
+        margin-top: 5px;
+        border-radius: 5px;
+        background-color: #314169;
+        color: white;
+        margin-bottom: 12px;
+    }
+    input:focus{
+        outline: none;
+        border: none;
+    }
+    ul{
+        list-style: none;
+        margin-left: 30px;
+        line-height: 1.2;
+        color: rgb(189, 189, 189);
+        font-size: 12px;
+    }
+}
+
+
+.botones{
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 73%;
+    .boton{
+        padding: 3px 55px;
+        color: #46516d;
+        background-color: white;
+        font-weight: 400;
+    }
+}
+
