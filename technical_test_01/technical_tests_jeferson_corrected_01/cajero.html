@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Cajero</title>
+    <link rel="stylesheet" href="styles.css">
+    <style ></style>
+</head>
+<body>
+    <header>
+        <h1>Hola Bienvenido a Aplicación de Cajero</h1>
+    </header>
+    <section class="principal-section">
+        <div>
+            <div>
+                <h1>Consulta de Saldo</h1>
+                <button type="button" onclick="generar()">Ver Saldo</button>
+                <h2 id="resultado1">💵</h2>
+            </div>
+
+            <div>
+                <h1>Depositar Saldo</h1>
+                <input type="text" name="depositar" id="depositar">
+                <button type="button" onclick="depositar()">Depositar saldo</button>
+            </div>
+
+            <div>
+                <h1>Ingrese valor a Retirar</h1>
+                <input type="text" name="retirar" id="retirar">
+                <button type="button" name="retiro" id="retiro" onclick="retirar()">Retirar Monto</button>
+            </div>
+
+            <div>
+                <h1>Mostrar monedas denominaciones</h1>
+                <div id="resultado"></div>
+            </div>
+
+            <!-- Historial de transacciones -->
+            <section>
+    
+            </section>
+            
+        </div>
+    </section>
+    
+</body>
+<!-- <script src="cajero.js"></script> --> 
+ <script>  // Desarrollamos aquí por el momento
+    // Saldo
+    let saldo = 1000;
+
+    // Métodos
+    function generar() {
+        document.getElementById('resultado1').innerHTML="Tu saldo actual es " + saldo;
+    }
+
+    function depositar() {
+        let cantidad = parseInt(document.getElementById('depositar').value);     //parseInt para convertir a tipo number
+        saldo = saldo + cantidad;       // Sumamos la cantidad ingresada
+        document.getElementById('resultado1').innerHTML="Tu saldo actual es " + saldo;
+        //document.getElementById('depositar').value = ''; // Limpiar el input
+    }
+
+    function retirar() {
+        let = cantidad = parseInt(document.getElementById('retirar').value);
+
+        if (saldo > 0 && cantidad <= saldo) {    // Validamos si el saldo es mayor y si la cantidad es menor al saldo. 
+            saldo = saldo - cantidad;      // Descontamos saldo
+            document.getElementById('resultado1').innerHTML="Tu saldo actual es " + saldo;
+            calcularDesglose(cantidad); // 😥 LLAMAMOS A LA FUNCIÓN CON LA CANTIDAD RETIRADA | LO QUE ME FALTO EN LA PRUEBA
+            //document.getElementById('retirar').value = ''; // Limpiar el input
+        } else {
+            document.getElementById('resultado1').innerHTML="No tiene saldo suficiente " + saldo;    // Error no me descuenta
+        }
+    }   
+
+    function calcularDesglose(monto) {   // 😥 RECIBIMOS EL MONTO COMO PARÁMETRO | LO QUE ME FALTO EN LA PRUEBA
+        // Valor del input
+        // const montoInput = document.getElementById('retirar');
+        // const monto = parseInt(montoInput.value);   // capturar ingresado
+        const resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.innerHTML = ''; // Limpiar
+
+        // Validar el monto
+        if (isNaN(monto) || monto <= 0) {
+            resultadoDiv.innerHTML = 'Por favor, ingrese un monto válido.';
+            return;
+        }
+
+        // Denominaciones
+        // ✅ SOLUCIÓN: Usar un array con el orden específico que necesitamos
+        const denominaciones = [
+            { valor: 200, cantidad: 0 },
+            { valor: 100, cantidad: 0 },
+            { valor: 20, cantidad: 0 },
+            { valor: 10, cantidad: 0 },
+            { valor: 5, cantidad: 0 },
+            { valor: 2, cantidad: 0 },
+            { valor: 1, cantidad: 0 }
+        ];
+
+        // Cálculo desglose
+        let montoRestante = monto;
+
+        // ✅ Recorremos las denominaciones de mayor a menor
+        for (let i = 0; i < denominaciones.length; i++) {
+            const denominacion = denominaciones[i];
+            if (montoRestante >= denominacion.valor) {
+                denominacion.cantidad = Math.floor(montoRestante / denominacion.valor);
+                montoRestante = montoRestante % denominacion.valor;
+            }
+        }
+
+        // Mostrar resultados
+        if (montoRestante === 0) {
+            let desgloseHTML = '<h3>Desglose de billetes:</h3>';
+            for (let i = 0; i < denominaciones.length; i++) {
+                const denom = denominaciones[i];
+                if (denom.cantidad > 0) {
+                    desgloseHTML += `<p>$${denom.valor}: ${denom.cantidad} billete(s)</p>`;
+                }
+            }
+            resultadoDiv.innerHTML = desgloseHTML;
+        } else {
+            resultadoDiv.innerHTML = 'No se puede dispensar el monto exacto con las denominaciones disponibles.';
+        }
+
+    }
+
+ </script>
+</html>

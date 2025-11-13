@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Cajero</title>
+    <link rel="stylesheet" href="styles.css">
+    <style ></style>
+</head>
+<body>
+    <header>
+        <h1>Hola Bienvenido a Aplicación de Cajero</h1>
+    </header>
+    <section class="principal-section">
+        <div>
+            <h1>Consulta de Saldo</h1>
+            <button type="button" onclick="atm.generar()">Ver Saldo</button>
+            <h2 id="resultado1">💵</h2>
+        </div>
+
+        <div>
+            <h1>Depositar Saldo</h1>
+            <input type="number" name="depositar" id="depositar" min="1">
+            <button type="button" onclick="atm.depositar()">Depositar saldo</button>
+        </div>
+
+        <div>
+            <h1>Ingrese valor a Retirar</h1>
+            <input type="number" name="retirar" id="retirar" min="1">
+            <button type="button" onclick="atm.retirar()">Retirar Monto</button>
+        </div>
+
+        <div>
+            <h1>Desglose de Billetes</h1>
+            <div id="resultado"></div>
+        </div>
+    </section>
+    
+</body>
+<!-- <script src="cajero.js"></script> --> 
+ <script>  // Desarrollamos aquí por el momento
+    class ATM {
+        constructor() {
+            this.saldo = 1000;
+            this.denominaciones = [200, 100, 50, 20, 10, 5, 2, 1];
+            this.transactionHistory = [];
+            //this.totalDispensed = 0;
+        }
+
+         // Métodos
+        generar() {
+            document.getElementById('resultado1').innerHTML = `Tu saldo actual es $${this.saldo}`;
+        }
+
+        depositar() {
+            const cantidad = parseInt(document.getElementById('depositar').value);
+            
+            if (isNaN(cantidad) || cantidad <= 0) {
+                alert('Por favor, ingrese una cantidad válida');
+                return;
+            }
+
+            this.saldo += cantidad;
+            this.generar();
+            document.getElementById('depositar').value = '';
+            
+            // Registrar en historial
+            this.transactionHistory.push({
+                tipo: 'DEPOSITO',
+                monto: cantidad,
+                fecha: new Date().toLocaleString()
+            });
+        }
+
+        retirar() {
+            const cantidad = parseInt(document.getElementById('retirar').value);
+            
+            if (isNaN(cantidad) || cantidad <= 0) {
+                alert('Por favor, ingrese una cantidad válida');
+                return;
+            }
+
+            if (cantidad > this.saldo) {
+                document.getElementById('resultado1').innerHTML = `No tiene saldo suficiente. Saldo actual: $${this.saldo}`;
+                return;
+            }
+
+            // Verificar si se puede dar el desglose exacto
+            const desglose = this.calcularDesglose(cantidad);
+            let montoRestante = cantidad;
+            
+            // Verificar si hay denominaciones suficientes
+            for (const denominacion in desglose) {
+                montoRestante -= denominacion * desglose[denominacion];
+            }
+
+            if (montoRestante > 0) {
+                document.getElementById('resultado').innerHTML = 'No se puede dispensar el monto exacto con las denominaciones disponibles.';
+                return;
+            }
+
+            // Realizar el retiro
+            this.saldo -= cantidad;
+            this.generar();
+            this.mostrarDesglose(desglose);
+            document.getElementById('retirar').value = '';
+            
+            // Registrar en historial
+            this.transactionHistory.push({
+                tipo: 'RETIRO',
+                monto: cantidad,
+                fecha: new Date().toLocaleString(),
+                desglose: desglose
+            });
+        }
+
+        calcularDesglose(monto) {
+            let montoRestante = monto;
+            const desglose = {
+                200: 0,
+                100: 0,
+                50: 0,
+                20: 0,
+                10: 0,
+                5: 0,
+                2: 0,
+                1: 0
+            };
+
+            // Calcular cuántos billetes de cada denominación
+            for (const denominacion of this.denominaciones) {
+                if (montoRestante >= denominacion) {
+                    desglose[denominacion] = Math.floor(montoRestante / denominacion);
+                    montoRestante %= denominacion;
+                }
+            }
+
+            return desglose;
+        }
+
+        mostrarDesglose(desglose) {
+            let desgloseHTML = '<h3>Billetes entregados:</h3>';
+            let hayBilletes = false;
+
+            for (const denominacion in desglose) {
+                if (desglose[denominacion] > 0) {
+                    hayBilletes = true;
+                    desgloseHTML += `<p>$${denominacion}: ${desglose[denominacion]} billete(s)</p>`;
+                }
+            }
+
+            if (!hayBilletes) {
+                desgloseHTML = '<p>No se requirieron billetes para este monto</p>';
+            }
+
+            document.getElementById('resultado').innerHTML = desgloseHTML;
+        }
+
+        // Método adicional para ver historial (opcional)
+        mostrarHistorial() {
+            console.log('Historial de transacciones:', this.transactionHistory);
+        }
+    }
+
+    // Crear instancia global de ATM
+    const atm = new ATM();
+    
+ </script>
+</html>
